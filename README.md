@@ -34,12 +34,13 @@ USER: {your_username}
 DATABASE: {your_database}
 PORT: {your_port}
 ```
+The commands required to extract, clean and upload the data are stored in milestone_2_commands.py. Similarly, the queries required to create the STAR-based schema are in milestone_3.sql, and the queries required to gather the necessary information requested by the company are in milestone_4.sql.
 
 ## File Structure
 
 - database_utils.py contains a class that is used to read the database credentials, connect to the database, and upload extracted data there.
 - data_extraction.py contains a class that is used to extract data from a variety of sources (e.g. PDF, API, S3 Bucket, RDS).
 - data_cleaning.py contains a class that is used to clean the data of null, erroneous and inconsistent entries.
-- milestone_2_commands.py contains the commands required for Milestone 2 - this mostly involves calling upon the functions defined in the other python files and executing them.
+- milestone_2_commands.py contains the commands required for Milestone 2.
 - milestone_3.sql contains the queries required for Milestone 3.
 - milestone_4.sql contains the queries required for Milestone 4.
