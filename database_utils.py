@@ -1,5 +1,4 @@
 import yaml
-import psycopg2
 from sqlalchemy import inspect
 from sqlalchemy import create_engine
 from data_extraction import DataExtractor

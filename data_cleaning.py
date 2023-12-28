@@ -8,40 +8,38 @@ class DataCleaning:
         pass
     
     def clean_dates(self, df, column):
-        return df[column].apply(lambda x: dateutil.parser.parse(x).strftime('%d/%m/%Y'))
+        df[column].apply(lambda x: dateutil.parser.parse(x).strftime('%d/%m/%Y'))
+        return df
     
     def clean_store_continent(self, continent):
         if "ee" in continent:
             return continent.replace("ee", "")
         else:
             return continent
-        
-    def date_checker(self, year):
-        if isinstance(year, float):
-            return year
-        else:
-            return np.nan
-
 
     def clean_user_data(self, df):
-        df.drop(columns = "index")
+        drop_list = ["index"]
+        classifications = ["GB", "DE", "US"]
+        df.drop(columns = drop_list)
         df = df.dropna()
         df = df[df.address != "NULL"]
-        if "date_of_birth" in list(df.columns):
-            df = self.clean_dates(df, "date_of_birth")
-        if "join_dates" in list(df.columns):
-            df = self.clean_dates(df, "join_dates")
+        df = df.loc[df["country_code"].isin(classifications)]
+        df = self.clean_dates(df, "join_date")
+        df = self.clean_dates(df, "date_of_birth")
         return df
     
     def clean_card_data(self,df):
+        classifications = ["VISA 16 digit", "JCB 15 digit", "Discover", "VISA 13 digit", "American Express", "Mastercard", "Maestro", "Visa 19 digit", "Diners Club / Carte Blanche", "JCB 16 digit"]
+        df = df.loc[df["card_provider"].isin(classifications)]
         df = df[df.card_number != "NULL"]
         return df
     
     def clean_store_data(self, df):
+        classifications = ["Europe", "America"]
         df["continent"] = df["continent"].apply(self.clean_store_continent)
-        df = df[df.lat == None]
+        df = df.loc[df["continent"].isin(classifications)]
         df = self.clean_dates(df, "opening_date")
-        df = df.dropna(inplace = True)
+        df = df[df.address != "NULL"]
         return df
      
     def convert_kg(self, weight):
@@ -49,7 +47,7 @@ class DataCleaning:
             return weight
         elif weight.endswith('.'):
             return float(weight.split()[0].replace("g", "")) 
-        if "x" in weight: 
+        elif "x" in weight: 
             weight_list = weight.split()
             combined_weight = float(weight_list[0])*float(weight_list[2].replace("g", ""))/1000
             return combined_weight
@@ -71,14 +69,14 @@ class DataCleaning:
         return clean_data
 
     def clean_orders_data(self, df):
-        column_list = ["first_name", "last_name", "1"]
-        df = df.drop(columns = column_list)
+        drop_list = ["first_name", "last_name", "1"]
+        df = df.drop(columns = drop_list)
         df = df.dropna()
         return df
 
     def clean_event_data(self, df):
+        classifications = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]
+        df = df.loc[df["month"].isin(classifications)]
         df = df.dropna()
-        df = df["year"].apply(self.date_checker)
-        df["Combined_Date"] = pd.to_datetime(df[['year', 'month', 'day']], dayfirst = True)
-        df_combined = df.join(df["Combined_Date"])
-        return df_combined
+        df['combined_date'] = pd.to_datetime(df[['year', 'month', 'day']])
+        return df

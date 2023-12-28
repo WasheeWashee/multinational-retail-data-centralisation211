@@ -16,14 +16,13 @@
 ## Cleaning the data of the selected table
 
 # table_list = database_connector.list_db_tables(aicore_engine)
-# n = input("Please input the index of the table to clean (0 = legacy_store_details, 1 = legacy_users, 2 = orders_table): ")
-# table = table_list[int(n)]
+# table = table_list[1]
 # df = data_extractor.read_rds_table(aicore_engine, table)
-# df = data_cleaner.clean_user_data(df)
+# df_clean = data_cleaner.clean_user_data(df)
 
-## Uploading cleaned data to database
+## Uploading cleaned user data to database
 
-# database_connector.upload_to_db(df, "dim_users", my_db_engine)
+# database_connector.upload_to_db(df_clean, "dim_users", my_db_engine)
 # print("Dataframe Uploaded")
 
 ### Milestone 2 Task 4
@@ -71,5 +70,5 @@
 
 # events_df = data_extractor.retrieve_JSON_data()
 # events_df_clean = data_cleaner.clean_event_data(events_df)
-# database_connector.upload_to_db(events_df_clean, "dim_date_times")
+# database_connector.upload_to_db(events_df_clean, "dim_date_times", my_db_engine)
 # print("Dataframe Uploaded")

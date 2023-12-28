@@ -1,8 +1,5 @@
 import pandas as pd
-import sqlalchemy
 from tabula import read_pdf
-# from database_utils import DatabaseConnector
-from data_cleaning import DataCleaning
 import requests
 import boto3
 
